@@ -284,9 +284,7 @@ data_plotting_tbl %>%
         legend.position = "none"
     )
 
-
-# Analyse -----------------------------------------------------------------
-
+# sa cdeii plot - time deocomposed 
 combined_tbl %>%
     group_by(regionid) %>%
     filter(regionid == "SA1") %>%
@@ -318,5 +316,20 @@ combined_tbl %>%
         
         
 
+# Model -----------------------------------------------------------------
 
+library(sweep)
+library(forecast)
+
+sa_no_coal_tbl <- combined_tbl %>%
+    filter(
+        regionid == "SA1",
+        settlementdate >  dmy("09/05/2016")
+    ) %>%
+    select(settlementdate, co2e_intensity_index) 
+
+sa_no_coal_tbl %>%
+    summarise(min = min(settlementdate), max=max(settlementdate))
+
+tk_ts(sa_no_coal_tbl, start )
 
