@@ -8,7 +8,6 @@ library(rvest)
 library(xml2)
 library(janitor)
 library(lubridate)
-library(tidyquant)
 library(anomalize)
 library(timetk)
 
@@ -104,8 +103,8 @@ combined_tbl %>%
     filter(regionid == "SA1") %>%
     arrange(settlementdate) %>%
     ggplot(aes(settlementdate, co2e_intensity_index)) +
-    geom_line(colour=palette_light()[[1]]) +
-    geom_vline(xintercept = dmy("09/05/2016"), colour = palette_light()[[2]], size=1) +
+    geom_line() +
+    geom_vline(xintercept = dmy("09/05/2016"),  size=1) +
     geom_smooth(
         data = combined_tbl %>% 
                 filter(
@@ -113,9 +112,7 @@ combined_tbl %>%
                     settlementdate >  dmy("09/05/2016")       
                 ),
         #se=FALSE,
-        fill = palette_light()[[6]],
-        alpha=0.4,
-        colour = palette_light()[[6]]
+        alpha=0.4
     ) +
     geom_smooth(
         data = combined_tbl %>% 
@@ -124,9 +121,7 @@ combined_tbl %>%
                 settlementdate <  dmy("09/05/2016")       
             ),
         #se=FALSE,
-        fill = palette_light()[[7]],
-        alpha=0.4,
-        colour = palette_light()[[7]]
+        alpha=0.4
     ) +
     labs(
         title = "AEMO CDEII: Daily CO2e Intensity Index for South Australia NEM Region",
@@ -137,7 +132,7 @@ combined_tbl %>%
         y = "CO2e Intensity Index (t CO2-e /MWh)",
         caption = "@morebento"
     ) +
-    theme_tq() 
+    theme_bw()
 
 
 # same with total emissions
@@ -314,22 +309,3 @@ combined_tbl %>%
     )
         
         
-        
-
-# Model -----------------------------------------------------------------
-
-library(sweep)
-library(forecast)
-
-sa_no_coal_tbl <- combined_tbl %>%
-    filter(
-        regionid == "SA1",
-        settlementdate >  dmy("09/05/2016")
-    ) %>%
-    select(settlementdate, co2e_intensity_index) 
-
-sa_no_coal_tbl %>%
-    summarise(min = min(settlementdate), max=max(settlementdate))
-
-tk_ts(sa_no_coal_tbl, start )
-
