@@ -6,6 +6,7 @@
 
 library(tidyverse)
 library(tidyquant)
+library(timetk)
 
 # read data ----
 
@@ -87,6 +88,7 @@ ggsave(
     units = "mm"
 )
 
+
 # model ------
 
 # correlation
@@ -127,6 +129,8 @@ cdeii_corr_plot <- cdeii_corr_tbl %>%
         x = "",
         fill = "Correlation"
     )
+
+cdeii_corr_plot
 
 # save the png
 ggsave(
