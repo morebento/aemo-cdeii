@@ -88,6 +88,16 @@ ggsave(
     units = "mm"
 )
 
+# quick look at wind vs temperature
+sa_combined_aemo_opennem_tbl %>%
+    filter(
+        wind_g_wh > 0 & temperature_mean_c > 0
+    ) %>%
+    ggplot(aes(wind_g_wh, temperature_mean_c)) +
+    geom_point(aes(colour=co2e_intensity_index))
+
+
+sa_combined_aemo_opennem_tbl %>% View()
 
 # model ------
 
