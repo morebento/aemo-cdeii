@@ -39,12 +39,14 @@ read_aemo_dmy_hm <- function(url) {
 
 
 # get current year's data. this is from the current URL http://nemweb.com.au/Reports/Current/CDEII/
-aemo_data_2021_tbl <- read_aemo_ymd_hms("http://www.nemweb.com.au/Reports/CURRENT/CDEII/CO2EII_SUMMARY_RESULTS.CSV") 
+aemo_data_current_tbl <- read_aemo_ymd_hms("http://www.nemweb.com.au/Reports/CURRENT/CDEII/CO2EII_SUMMARY_RESULTS.CSV") 
 
 
 # get the previous years' data - this is from the archive directory
 
 # this tranche have dates in hms format
+aemo_data_2022_tbl <- read_aemo_ymd_hms("https://www.aemo.com.au/-/media/Files/Electricity/NEM/Settlements_and_Payments/Settlements/2020/CO2EII_SUMMARY_RESULTS_2020.CSV")
+aemo_data_2021_tbl <- read_aemo_ymd_hms("https://www.aemo.com.au/-/media/Files/Electricity/NEM/Settlements_and_Payments/Settlements/2020/CO2EII_SUMMARY_RESULTS_2020.CSV")
 aemo_data_2020_tbl <- read_aemo_ymd_hms("https://www.aemo.com.au/-/media/Files/Electricity/NEM/Settlements_and_Payments/Settlements/2020/CO2EII_SUMMARY_RESULTS_2020.CSV")
 aemo_data_2019_tbl <- read_aemo_ymd_hms("https://www.aemo.com.au/-/media/Files/Electricity/NEM/Settlements_and_Payments/Settlements/2019/CO2EII_SUMMARY_RESULTS_2019.CSV")
 aemo_data_2018_tbl <- read_aemo_ymd_hms("https://www.aemo.com.au/-/media/Files/Electricity/NEM/Settlements_and_Payments/Settlements/2018/CO2EII_SUMMARY_RESULTS_2018.CSV")
@@ -63,7 +65,8 @@ aemo_data_2015_tbl <- read_aemo_dmy_hm("https://www.aemo.com.au/-/media/Files/El
 # Tidy ----------------
 
 # combine
-aemo_combined_tbl <- bind_rows(aemo_data_2011_tbl, 
+aemo_combined_tbl <- bind_rows(
+                          aemo_data_2011_tbl, 
                           aemo_data_2012_tbl, 
                           aemo_data_2013_tbl, 
                           aemo_data_2014_a_tbl, 
@@ -74,7 +77,10 @@ aemo_combined_tbl <- bind_rows(aemo_data_2011_tbl,
                           aemo_data_2018_tbl, 
                           aemo_data_2019_tbl,
                           aemo_data_2020_tbl,
-                          aemo_data_2021_tbl) %>% 
+                          aemo_data_2021_tbl,
+                          aemo_data_2022_tbl,
+                          aemo_data_current_tbl,
+                          ) %>% 
     drop_na() %>%
     select(-i, -co2eii, -publishing, -x1,  -weekno, -contractyear) %>%
     mutate(
@@ -83,6 +89,6 @@ aemo_combined_tbl <- bind_rows(aemo_data_2011_tbl,
 
 # Export ------------------------------------------------------------------
 
-write_rds(aemo_combined_tbl, "data/cdeii_2011_to_2021.rds")
+write_rds(aemo_combined_tbl, "data/cdeii_2011_to_current.rds")
 
 

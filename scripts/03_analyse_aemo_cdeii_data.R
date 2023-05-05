@@ -9,7 +9,7 @@ library(tidyquant)
 
 # import data --------
 
-aemo_cdeii_tbl <- read_rds("data/cdeii_2011_to_2021.rds")
+aemo_cdeii_tbl <- read_rds("data/cdeii_2011_to_current.rds")
 
 # explore data -------
 
